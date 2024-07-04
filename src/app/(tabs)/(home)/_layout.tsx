@@ -2,16 +2,30 @@ import { StackScreenWithSearchBar } from "@/constants/layout"
 import { colors } from "@/constants/tokens"
 import {defaultStyles} from "@/styles"
 import { Stack } from "expo-router"
-import React from "react"
+import React, { useCallback, useRef } from "react"
 import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView} from "react-native"
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import SongsScreen from "."
-
+import { GestureHandlerRootView } from "react-native-gesture-handler"
+import BottomSheet, { BottomSheetRefProps, MAX_Y } from "./BottomSheet"
 
 
 const SongScreenLayout = () => {
+    const ref = useRef<BottomSheetRefProps>(null)
+    const onPress = useCallback(() => {
+        const isActive = ref?.current?.isActive()
+
+        if(isActive){
+            ref?.current?.scrollTo(0);
+        }
+        else{
+            ref?.current?.scrollTo(MAX_Y);
+        }
+    }, [])
+
     return (
-        <View style={defaultStyles.container}>
+        <GestureHandlerRootView style={defaultStyles.container}>
+            <BottomSheet ref = {ref}></BottomSheet>
             <Stack>
                 <Stack.Screen 
                     name="index"
@@ -20,7 +34,7 @@ const SongScreenLayout = () => {
                         headerTitle: 'Hjem',
                         headerRight: () => (
                             <TouchableOpacity
-                                onPress={() => alert('Button pressed!')}
+                                onPress={onPress}
                                 style={defaultStyles.button}
                             >
                                 <Icon name="plus" size={20} color={colors.primary} />
@@ -29,7 +43,7 @@ const SongScreenLayout = () => {
                     }}
                 />
             </Stack>
-        </View>
+        </GestureHandlerRootView>
     );
 };
 

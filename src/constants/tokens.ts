@@ -6,7 +6,8 @@ export const colors = {
 	icon: '#fff',
 	maximumTrackTintColor: 'rgba(255,255,255,0.4)',
 	minimumTrackTintColor: 'rgba(255,255,255,0.6)',
-	container: "#131313"
+	container: "#131313",
+	sheetContainer: "#131313"
 }
 
 export const fontSize = {
