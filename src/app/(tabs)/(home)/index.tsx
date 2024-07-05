@@ -5,11 +5,12 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { colors } from "@/constants/tokens";
 import DropDown from "./DropDown";
-import InputField from "./InputField";
 import Spacer from "./Spacer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import BottomSheet from "./BottomSheet";
+import { InputField } from "./InputField";
+import TankCard from "./TankCard";
 
 
 const HomeScreen = () => {
@@ -22,7 +23,10 @@ const HomeScreen = () => {
                     <DropDown></DropDown>
                 </View>
                 <View style = {defaultStyles.inputfieldcontainer}>
-                    <InputField></InputField>
+                    <InputField label="Angi vekt (kg)"></InputField>
+                </View>
+                <View style = {defaultStyles.inputfieldcontainer}>
+                    <TankCard></TankCard>
                 </View>
             </View>
         </SafeAreaView>

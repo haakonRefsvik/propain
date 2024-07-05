@@ -5,6 +5,7 @@ import Spacer from "./Spacer";
 import Animated, { useAnimatedStyle, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { colors } from "@/constants/tokens";
+import { InputField } from "./InputField";
 
 const {height: SCREEN_HEIGHT} = Dimensions.get("window");
 export const MAX_Y = -SCREEN_HEIGHT + 150
@@ -48,7 +49,6 @@ const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProps>(
         .onEnd(() => {
             if(translateY.value > -SCREEN_HEIGHT * 0.7) {
                 scrollTo(0)
-                console.log("HEEH");
             }
             else if (translateY.value <- SCREEN_HEIGHT / 1.5){
                 scrollTo(MAX_Y)
@@ -69,6 +69,8 @@ const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProps>(
                 <Text style = {defaultStyles.text}>
                     Legg til en tank
                 </Text>
+                <Spacer size={25}></Spacer>
+                <InputField label={"Egendefinert (L)"}></InputField>
             </Animated.View>
 
         </GestureDetector>

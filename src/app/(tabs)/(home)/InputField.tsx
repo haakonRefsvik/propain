@@ -3,8 +3,11 @@ import { TouchableOpacity, View, Text, FlatList, TextInput } from "react-native"
 import { inputstyles } from "./DropDown";
 import { colors } from "@/constants/tokens";
 
+interface InputFieldProps {
+    label: string;
+}
 
-export default function InputField(){
+export const InputField: React.FC<InputFieldProps> = ({ label }) =>{
     const inputRef = useRef<TextInput>(null);
     const [focused, setFocused] = useState(false);
 
@@ -25,7 +28,7 @@ export default function InputField(){
                 onPress={handlePress}
                 activeOpacity={0.8}
             >
-                <Text style = {inputstyles.dropdowntitle}> Angi vekt (kg) </Text>
+                <Text style = {inputstyles.dropdowntitle}>{label}</Text>
                 <TextInput
                     keyboardType="numeric"
                     ref={inputRef}
