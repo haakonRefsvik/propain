@@ -1,21 +1,45 @@
 import { colors } from "@/constants/tokens";
 import { defaultStyles } from "@/styles";
-import { Text, StyleSheet, View, TouchableOpacity} from "react-native";
+import React from "react";
+import { Text, StyleSheet, View, TouchableOpacity, ImageSourcePropType, Image} from "react-native";
+import Spacer from "./Spacer";
+import Svg, { Path } from 'react-native-svg';
+import { SvgXml } from 'react-native-svg';
+
+interface TankCardProps{
+    liters: number;
+    svg: {
+        svgXml: string;
+        width?: number | string;
+        height?: number | string;
+    };
+}
 
 
-export default function TankCard(){
+export const TankCard: React.FC<TankCardProps> = ({liters, svg}) =>{
+    const svgContent = svg.svgXml
+
     return(
         <View>
             <TouchableOpacity
                 style = {styles.cardcontainer}
             >
-            <Text style = {defaultStyles.text}> halla chief</Text>
+            <Text style = {defaultStyles.text}>{liters} L</Text>
+            <View style={styles.svgcontainer}>
+                <SvgXml xml={svgContent} width="100%" height="100%" />
+            </View>
             </TouchableOpacity>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    svgcontainer: {
+        width: 100,
+        height: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     cardcontainer: {
         height: 100,
         justifyContent: "space-between",
@@ -23,7 +47,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         width: "100%",
         alignItems: "center",
-        paddingHorizontal: 10,
+        paddingHorizontal: 25,
         borderRadius: 8,
     }
 })
