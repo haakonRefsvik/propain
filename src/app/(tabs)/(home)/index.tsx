@@ -12,6 +12,7 @@ import BottomSheet from "./BottomSheet";
 import { InputField } from "./InputField";
 import { TankCard } from "./TankCard";
 import card from "assets/Vector 1.svg"
+import TankIcon24L from "./TankSVG";
 
 const HomeScreen = () => {
     return (
@@ -25,9 +26,7 @@ const HomeScreen = () => {
                 <View style = {defaultStyles.inputfieldcontainer}>
                     <InputField label="Angi vekt (kg)"></InputField>
                 </View>
-                <View style = {defaultStyles.inputfieldcontainer}>
-                    <TankCard liters = {25} svg={card}></TankCard>
-                </View>
+                
             </View>
         </SafeAreaView>
     );

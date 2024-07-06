@@ -7,7 +7,7 @@ export const colors = {
 	maximumTrackTintColor: 'rgba(255,255,255,0.4)',
 	minimumTrackTintColor: 'rgba(255,255,255,0.6)',
 	container: "#131313",
-	sheetContainer: "#131313"
+	sheetContainer: "#1F1F1F",
 }
 
 export const fontSize = {
@@ -15,6 +15,11 @@ export const fontSize = {
 	sm: 16,
 	base: 20,
 	lg: 24,
+}
+
+export const opacity = {
+	high: 0.8,
+	low: 0.6
 }
 
 export const screenPadding = {

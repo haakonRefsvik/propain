@@ -2,7 +2,7 @@ import { defaultStyles } from "@/styles";
 import React, { useCallback, useState } from "react";
 import { TouchableOpacity, View, Text, FlatList, StyleSheet} from "react-native";
 import {AntDesign} from "@expo/vector-icons"
-import { colors, fontSize } from "@/constants/tokens";
+import { colors, fontSize, opacity } from "@/constants/tokens";
 
 
 export default function DropDown(){
@@ -65,7 +65,7 @@ export const inputstyles = StyleSheet.create({
     },
     dropdowntitle:{
         color: colors.text,
-        opacity: 0.6,
+        opacity: opacity.low,
         fontSize: fontSize.sm
     },
     optiontext: {

@@ -1,32 +1,47 @@
-import { colors } from "@/constants/tokens";
+import { colors, fontSize, opacity } from "@/constants/tokens";
 import { defaultStyles } from "@/styles";
 import React from "react";
 import { Text, StyleSheet, View, TouchableOpacity, ImageSourcePropType, Image} from "react-native";
 import Spacer from "./Spacer";
-import Svg, { Path } from 'react-native-svg';
+import Svg, { Path, SvgProps } from 'react-native-svg';
 import { SvgXml } from 'react-native-svg';
 
-interface TankCardProps{
+export interface TankCardProps{
+    emptyWeight: number;
     liters: number;
-    svg: {
-        svgXml: string;
-        width?: number | string;
-        height?: number | string;
-    };
+    Icon: React.FC<SvgProps & { color?: string }>;
+    svgColor?: string;
 }
 
 
-export const TankCard: React.FC<TankCardProps> = ({liters, svg}) =>{
-    const svgContent = svg.svgXml
+export const TankCard: React.FC<TankCardProps> = ({emptyWeight, liters, Icon, svgColor}) =>{
 
     return(
         <View>
             <TouchableOpacity
                 style = {styles.cardcontainer}
+                activeOpacity={0.8}
             >
-            <Text style = {defaultStyles.text}>{liters} L</Text>
+            <View>
+                <Text style = {{
+                    fontSize: fontSize.lg, 
+                    fontWeight: "500", 
+                    color: colors.text}}>
+                    {liters} L
+                </Text>
+                <Spacer size={5}></Spacer>
+                <Text style = {{
+                    fontSize: fontSize.xs, 
+                    fontWeight: "500", 
+                    opacity: opacity.low,
+                    color: colors.text}}>
+                    Empty weight: {emptyWeight} kg
+                </Text>
+            </View>
+            
             <View style={styles.svgcontainer}>
-                <SvgXml xml={svgContent} width="100%" height="100%" />
+                <Spacer size={50} horizontal></Spacer>
+                <Icon width="100%" height="35%" color={svgColor}/>
             </View>
             </TouchableOpacity>
         </View>
@@ -35,19 +50,20 @@ export const TankCard: React.FC<TankCardProps> = ({liters, svg}) =>{
 
 const styles = StyleSheet.create({
     svgcontainer: {
+        flexDirection: "row",
         width: 100,
         height: 100,
         justifyContent: 'center',
         alignItems: 'center',
     },
     cardcontainer: {
-        height: 100,
+        height: 80,
         justifyContent: "space-between",
         backgroundColor: colors.sheetContainer,
         flexDirection: "row",
-        width: "100%",
+        width: 400,
         alignItems: "center",
-        paddingHorizontal: 25,
+        paddingHorizontal: 20,
         borderRadius: 8,
     }
 })
