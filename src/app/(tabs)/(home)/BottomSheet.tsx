@@ -13,15 +13,15 @@ import TankList from "./TankList";
 
 const {height: SCREEN_HEIGHT} = Dimensions.get("window");
 export const MAX_Y = -SCREEN_HEIGHT + 150
-type BottomSheetProps = {}
+type BottomSheetProps = {children: React.ReactNode}
 
 export type BottomSheetRefProps = {
     scrollTo: (destination: number) => void;
     isActive: () => boolean
 }
 
-const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProps>(
-    ({}, ref) => {
+const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProps> (
+    ({children}, ref, ) => {
     
     const active = useSharedValue(false)
     const translateY = useSharedValue(0)
@@ -80,12 +80,8 @@ const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProps>(
             <Animated.View style = {[styles.sheetcontainer, BottomSheetStyle]}>
                 <View style = {styles.thumbline}/>
                 <Spacer size={25}></Spacer>
-                <Text style = {{color: colors.text, fontSize: fontSize.lg, fontWeight: "bold"}}>
-                    Legg til en tank
-                </Text>
-                <TankList tanks={tanksData}></TankList>
+                {children}
             </Animated.View>
-
         </GestureDetector>
     )
 })

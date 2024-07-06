@@ -1,11 +1,9 @@
 import { colors, fontSize, opacity } from "@/constants/tokens";
 import { defaultStyles } from "@/styles";
-import React from "react";
+import React, { useState } from "react";
 import { Text, StyleSheet, View, TouchableOpacity, ImageSourcePropType, Image} from "react-native";
 import Spacer from "./Spacer";
 import Svg, { Path, SvgProps } from 'react-native-svg';
-import { SvgXml } from 'react-native-svg';
-import { getData, storeData } from './DataBase';
 
 export interface TankCardProps{
     emptyWeight: number;
@@ -17,26 +15,12 @@ export interface TankCardProps{
 
 
 export const TankCard: React.FC<TankCardProps> = ({emptyWeight, liters, Icon, svgColor}) =>{
-
-    const addTank = async () => {
-        try {
-            await storeData(liters, "my tank");
-            console.log('Data stored successfully.');
-            // Optionally, you can do something after storing data
-        } catch (error) {
-            console.error('Error storing data:', error);
-        }
-    };
     
-
-    getData("my tank")
-
     return(
         <View>
             <TouchableOpacity
                 style = {styles.cardcontainer}
                 activeOpacity={0.8}
-                onPress={addTank}
             >
             <View>
                 <Text style = {{
@@ -65,6 +49,13 @@ export const TankCard: React.FC<TankCardProps> = ({emptyWeight, liters, Icon, sv
 }
 
 const styles = StyleSheet.create({
+    modalcontainer: {
+        zIndex: 3,
+        width: 100,
+        height: 100,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     svgcontainer: {
         flexDirection: "row",
         width: 100,

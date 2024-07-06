@@ -12,7 +12,7 @@ import BottomSheet from "./BottomSheet";
 import { InputField } from "./InputField";
 import { TankCard } from "./TankCard";
 import card from "assets/Vector 1.svg"
-import TankIcon24L from "./TankSVG";
+
 
 const HomeScreen = () => {
     return (
