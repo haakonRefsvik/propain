@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Modal as CustomModal} from 'react-native';
 import { colors, fontSize } from '@/constants/tokens';
+import Spacer from './Spacer';
 
 interface TankNameModalProps {
     visible: boolean;
@@ -12,18 +13,25 @@ const TankNameModal: React.FC<TankNameModalProps> = ({ visible, onClose, onSave 
     const [tankName, setTankName] = useState('');
 
     return (
-        <CustomModal visible ={visible}>
-            <View style={styles.modalContent}>
-                <Text style={styles.modalTitle}>Name Your Tank</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Enter tank name"
-                    value={tankName}
-                    onChangeText={setTankName}
-                />
-                <View style={styles.buttonContainer}>
-                    <Button title="Save" onPress={() => onSave(tankName)} />
-                    <Button title="Cancel" onPress={onClose} />
+        <CustomModal 
+        visible ={visible}
+        transparent
+        animationType='fade'
+        statusBarTranslucent
+        >
+            <View style = {styles.overlay}>
+                <View style={styles.modalContent}>
+                    <Text style={styles.modalTitle}>Gi tanken et navn</Text>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Hus, hytte..."
+                        value={tankName}
+                        onChangeText={setTankName}
+                    />
+                    <View style={styles.buttonContainer}>
+                        <Button color = {colors.maximumTrackTintColor} title="Avbryt" onPress={onClose} />
+                        <Button color = {colors.primary} title="Lagre" onPress={() => onSave(tankName)} />
+                    </View>
                 </View>
             </View>
         </CustomModal>
@@ -31,12 +39,19 @@ const TankNameModal: React.FC<TankNameModalProps> = ({ visible, onClose, onSave 
 };
 
 const styles = StyleSheet.create({
+    overlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    },
     modalContent: {
         width: '80%',
         padding: 20,
-        backgroundColor: 'white',
-        borderRadius: 10,
+        backgroundColor: colors.container,
+        borderRadius: 20,
         alignItems: 'center',
+        justifyContent: "center"
     },
     modalTitle: {
         fontSize: fontSize.lg,
@@ -45,6 +60,7 @@ const styles = StyleSheet.create({
     },
     input: {
         width: '100%',
+        color: colors.text,
         padding: 10,
         borderWidth: 1,
         borderColor: 'gray',

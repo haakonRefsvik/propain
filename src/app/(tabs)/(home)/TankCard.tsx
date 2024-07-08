@@ -10,17 +10,17 @@ export interface TankCardProps{
     liters: number;
     Icon: React.FC<SvgProps & { color?: string }>;
     svgColor?: string;
+    onPress?: () => void;
 }
 
-
-
-export const TankCard: React.FC<TankCardProps> = ({emptyWeight, liters, Icon, svgColor}) =>{
+export const TankCard: React.FC<TankCardProps> = ({emptyWeight, liters, Icon, svgColor, onPress}) =>{
     
     return(
         <View>
             <TouchableOpacity
                 style = {styles.cardcontainer}
                 activeOpacity={0.8}
+                onPress={onPress}
             >
             <View>
                 <Text style = {{
@@ -49,13 +49,6 @@ export const TankCard: React.FC<TankCardProps> = ({emptyWeight, liters, Icon, sv
 }
 
 const styles = StyleSheet.create({
-    modalcontainer: {
-        zIndex: 3,
-        width: 100,
-        height: 100,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     svgcontainer: {
         flexDirection: "row",
         width: 100,
@@ -71,6 +64,6 @@ const styles = StyleSheet.create({
         width: 400,
         alignItems: "center",
         paddingHorizontal: 20,
-        borderRadius: 8,
+        borderRadius: 14,
     }
 })

@@ -3,15 +3,18 @@ import React, { useCallback, useState } from "react";
 import { TouchableOpacity, View, Text, FlatList, StyleSheet} from "react-native";
 import {AntDesign} from "@expo/vector-icons"
 import { colors, fontSize, opacity } from "@/constants/tokens";
+import { getAllData, getData, storeData } from "./DataBase";
 
 
 export default function DropDown(){
     const [expanded, setExpanded] = useState(false);
     const toggleExpanded = useCallback(() => setExpanded(!expanded), [expanded])
     const [value, setValue] = useState("")
+
     const onSelect = useCallback((item: {value: string; label: string}) => {
         setValue(item.value)
         setExpanded(false)
+
     }, [])
 
     return (

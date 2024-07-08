@@ -6,16 +6,20 @@ import Spacer from "./Spacer";
 
 interface TankListProps {
     tanks: TankCardProps[];
+    onTankPress: (tank: TankCardProps) => void
 }
 
-const TankList: React.FC<TankListProps> = ({ tanks }) => {
+const TankList: React.FC<TankListProps> = ({ tanks, onTankPress}) => {
     const renderItem = ({ item }: { item: TankCardProps }) => (
-        <TankCard liters={item.liters} emptyWeight={item.emptyWeight} svgColor={item.svgColor} Icon={item.Icon} />
+        <TankCard 
+            {...item}
+            onPress={() => onTankPress(item)}
+        />
     );
 
     const renderSeparator = () => <Spacer size={10}></Spacer>
 
-    return (
+    return ( 
         <View style={styles.container}>
             <Spacer size={40} />
             <FlatList
