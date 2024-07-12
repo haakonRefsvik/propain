@@ -11,8 +11,8 @@ import TankList from "./TankList"
 import Spacer from "./Spacer"
 import { TankIcon12L, TankIcon18L, TankIcon24L, TankIcon26L, TankIcon27L, TankIcon33L} from "./TankSVG"
 import { TankCardProps } from "./TankCard"
-import TankNameModal from "./Modal"
 import { storeData } from "./DataBase"
+import TankNameModal from "./Modal"
 
 const tanksData = [
     { liters: 12.5, emptyWeight: 3.4, svgColor: colors.primary, Icon: TankIcon12L},
@@ -23,7 +23,7 @@ const tanksData = [
     { liters: 33.5, emptyWeight: 7.5, svgColor: colors.primary, Icon: TankIcon33L}
 ];
 
-const HomeScreenLayout = () => {
+export const HomeScreenLayout = () => {
     const ref = useRef<BottomSheetRefProps>(null)
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedTank, setSelectedTank] = useState<TankCardProps>()
