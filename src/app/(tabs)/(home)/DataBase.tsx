@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // value: liters of the tank
 // key: users name of the tank
 const storeData = async (value: number, key: string) => {
-    try {
+        try {
       await AsyncStorage.setItem(key, value.toString());
     } catch (e) {
         throw e
@@ -25,15 +25,17 @@ const getData = async (key: string) => {
     }
 };
 
-const getAll = async () => {
+const getAllData = async () => {
   try {
       const keys = await AsyncStorage.getAllKeys()
       const items = await AsyncStorage.multiGet(keys)
 
-      return items
+      return items.map(([key, value]) => ({ key, value: value ? JSON.parse(value) : null }));
+
   } catch (error) {
       console.log(error, "problemo")
   }
-}
+};
 
-export {storeData, getData}
+
+export {storeData, getData, getAllData}

@@ -1,22 +1,35 @@
 import { defaultStyles } from "@/styles";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { TouchableOpacity, View, Text, FlatList, StyleSheet} from "react-native";
 import {AntDesign} from "@expo/vector-icons"
 import { colors, fontSize, opacity } from "@/constants/tokens";
 import { getAllData, getData, storeData } from "./DataBase";
 
+interface Option {
+    key: string;
+    value: any;
+}
 
 export default function DropDown(){
     const [expanded, setExpanded] = useState(false);
     const toggleExpanded = useCallback(() => setExpanded(!expanded), [expanded])
     const [value, setValue] = useState("")
+    const [options, setOptions] = useState<Option[]>([]);
 
-    const onSelect = useCallback((item: {value: string; label: string}) => {
-        setValue(item.value)
+    const onSelect = useCallback((item: {key: string}) => {
+        setValue(item.key)
         setExpanded(false)
-
     }, [])
 
+    useEffect(() => {
+        const fetchAndSetData = async () => {
+            const storedData = await getAllData();
+            setOptions(storedData || []);  // Assume storedData is an array of items for the dropdown
+        };
+        
+        fetchAndSetData();
+    }, []);
+    
     return (
         <View>
             <TouchableOpacity 
@@ -33,19 +46,15 @@ export default function DropDown(){
             {expanded ? (
                 <View style = {inputstyles.options}>
                 <FlatList
-                    keyExtractor={(item) => item.value}
-                    data = {[
-                        {value: "Heh", label: "h"},
-                        {value: "Heh2", label: "h2"},
-                        
-                    ]}
+                    keyExtractor={(item) => item.key}
+                    data = {options}
                     renderItem={({item}) => (
                         <TouchableOpacity 
                             activeOpacity={0.8}
                             style = {inputstyles.optionItem}
                             onPress={() => onSelect(item)}
                         >
-                            <Text style = {inputstyles.optiontext}>{item.value}</Text>
+                            <Text style = {inputstyles.optiontext}>{item.key}</Text>
                         </TouchableOpacity>
                     )}
                 />
