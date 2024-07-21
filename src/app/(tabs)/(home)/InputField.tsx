@@ -5,9 +5,11 @@ import { colors } from "@/constants/tokens";
 
 interface InputFieldProps {
     label: string;
+    value: string;
+    onChange: (newValue: string) => void;
 }
 
-export const InputField: React.FC<InputFieldProps> = ({ label }) =>{
+export const InputField: React.FC<InputFieldProps> = ({ label , value, onChange }) =>{
     const inputRef = useRef<TextInput>(null);
     const [focused, setFocused] = useState(false);
 
@@ -20,6 +22,11 @@ export const InputField: React.FC<InputFieldProps> = ({ label }) =>{
         setFocused(!focused);
     }, [focused]);
 
+
+    const handleChangeText = (text: string) => {
+        onChange(text);
+        console.log(text)
+    };
 
     return (
         <View>
@@ -34,6 +41,8 @@ export const InputField: React.FC<InputFieldProps> = ({ label }) =>{
                     ref={inputRef}
                     style = {inputstyles.input}
                     maxLength = {10}
+                    value={value}
+                    onChangeText={handleChangeText}
                 >
                 </TextInput>
             </TouchableOpacity>

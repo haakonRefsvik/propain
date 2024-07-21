@@ -16,6 +16,9 @@ import { storeData } from "./DataBase";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import TankList from "./TankList";
 import tanksData from "../../../../assets/TankData";
+import useWeight from "./UseWeight";
+import getFillRate from "@/utils/GetFillRate";
+import parseNumber from "@/utils/ParseNumber";
 
 const HomeScreen = () => {
     const navigation = useNavigation();
@@ -23,6 +26,7 @@ const HomeScreen = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedTank, setSelectedTank] = useState<TankCardProps>()
     const { options, deleteOption, addOption} = useOptions();
+    const { inputValue, handleInputChange } = useWeight();
 
     const onPress = useCallback(() => {
         const isActive = ref?.current?.isActive()
@@ -86,10 +90,24 @@ const HomeScreen = () => {
                     />
                     </View>
                     <View style = {defaultStyles.inputfieldcontainer}>
-                        <InputField label="Angi vekt (kg)"></InputField>
+                        <InputField 
+                            label="Angi vekt (kg)"
+                            value={inputValue}
+                            onChange={handleInputChange}
+                            >
+                        </InputField>
                     </View>
                     <View style = {defaultStyles.inputfieldcontainer}>
-                        <Text style = {defaultStyles.text}>Fyllingsgrad:</Text>
+                        <Text style = {defaultStyles.text}>Fyllingsgrad {
+
+                            getFillRate(
+                                selectedTank?.emptyWeight || 1, 
+                                parseNumber(inputValue), 
+                                selectedTank?.liters || 1)
+                            * 100
+                            }
+                            %
+                        </Text>
                     </View>
                 </View>
                 <TankNameModal 
