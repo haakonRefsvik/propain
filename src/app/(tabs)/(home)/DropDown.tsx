@@ -4,32 +4,25 @@ import { TouchableOpacity, View, Text, FlatList, StyleSheet} from "react-native"
 import {AntDesign} from "@expo/vector-icons"
 import { colors, fontSize, opacity } from "@/constants/tokens";
 import { getAllData, getData, storeData } from "./DataBase";
+import useOptions from "./UseOptions";
+import Icon from 'react-native-vector-icons/FontAwesome6';
+import Spacer from "./Spacer";
 
-interface Option {
-    key: string;
-    value: any;
-}
+type DropDownProps = {
+    options: { key: string; value: string }[]; // Options received from the parent
+    deleteTank: (key: string) => void;
+};
 
-export default function DropDown(){
+export default function DropDown({ options, deleteTank }: DropDownProps) {
     const [expanded, setExpanded] = useState(false);
     const toggleExpanded = useCallback(() => setExpanded(!expanded), [expanded])
     const [value, setValue] = useState("")
-    const [options, setOptions] = useState<Option[]>([]);
-
+    
     const onSelect = useCallback((item: {key: string}) => {
         setValue(item.key)
         setExpanded(false)
     }, [])
 
-    useEffect(() => {
-        const fetchAndSetData = async () => {
-            const storedData = await getAllData();
-            setOptions(storedData || []);  // Assume storedData is an array of items for the dropdown
-        };
-        
-        fetchAndSetData();
-    }, []);
-    
     return (
         <View>
             <TouchableOpacity 
@@ -55,6 +48,10 @@ export default function DropDown(){
                             onPress={() => onSelect(item)}
                         >
                             <Text style = {inputstyles.optiontext}>{item.key}</Text>
+                            <Text style = {inputstyles.optionValuetext}>{item.value} L</Text>
+                            <TouchableOpacity onPress={() => deleteTank(item.key)}>
+                                <Icon name="xmark" size={17} style = {inputstyles.removeButton}/>
+                            </TouchableOpacity>
                         </TouchableOpacity>
                     )}
                 />
@@ -65,6 +62,10 @@ export default function DropDown(){
 }
 
 export const inputstyles = StyleSheet.create({
+    removeButton: {
+        color: colors.text,
+        opacity: 0.4,
+    },
     input: {
         height: 40,
         margin: 12,
@@ -82,12 +83,21 @@ export const inputstyles = StyleSheet.create({
     },
     optiontext: {
         color: colors.text,
-        fontSize: fontSize.sm
+        fontSize: fontSize.sm,
+        width: "20%"
+    },
+    optionValuetext: {
+        paddingHorizontal: 0,
+        color: colors.text,
+        fontSize: fontSize.sm - 2,
+        opacity: opacity.low
     },
     optionItem: {
         height: 40,
-        justifyContent: "center",
         color: "red",
+        flexDirection: "row",
+        paddingHorizontal: 10,
+        justifyContent: "space-between",
     },
     options: {
         position: "absolute",

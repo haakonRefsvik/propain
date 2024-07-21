@@ -25,6 +25,14 @@ const getData = async (key: string) => {
     }
 };
 
+const deleteData = async(key: string) => {
+  try {
+    await AsyncStorage.removeItem(key)
+  } catch (e) {
+      throw e
+  }
+}
+
 const getAllData = async () => {
   try {
       const keys = await AsyncStorage.getAllKeys()
@@ -33,9 +41,9 @@ const getAllData = async () => {
       return items.map(([key, value]) => ({ key, value: value ? JSON.parse(value) : null }));
 
   } catch (error) {
-      console.log(error, "problemo")
+      console.log(error, "problem")
   }
 };
 
 
-export {storeData, getData, getAllData}
+export {storeData, getData, getAllData, deleteData}

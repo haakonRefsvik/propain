@@ -35,8 +35,10 @@ const TabsNavigation = () => {
             ),
         }}
         >
-        <Tabs.Screen name = "(home)"
+        <Tabs.Screen 
+            name = "(home)"
             options={{title: "Home",
+            
             tabBarIcon: ({color}) => <MaterialCommunityIcons 
                 name = "propane-tank"
                 size = {20}
@@ -44,6 +46,7 @@ const TabsNavigation = () => {
             />
         }}
         />
+
         <Tabs.Screen name = "settings"
            options={{title: "Settings",
            tabBarIcon: ({color}) => <FontAwesome 

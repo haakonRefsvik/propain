@@ -12,7 +12,7 @@ import { TankIcon12L, TankIcon18L, TankIcon24L, TankIcon26L, TankIcon27L, TankIc
 import TankList from "./TankList";
 
 const {height: SCREEN_HEIGHT} = Dimensions.get("window");
-export const MAX_Y = -SCREEN_HEIGHT + 150
+export const MAX_Y = -SCREEN_HEIGHT
 type BottomSheetProps = {children: React.ReactNode}
 
 export type BottomSheetRefProps = {
