@@ -17,16 +17,20 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import TankList from "./TankList";
 import tanksData from "../../../../assets/TankData";
 import useWeight from "./UseWeight";
-import getFillRate from "@/utils/GetFillRate";
+import {getFillRate, getMaxWeight} from "@/utils/GetFillRate";
 import parseNumber from "@/utils/ParseNumber";
+import useSelectedTank from "./UseSelectedTank";
+import Tank from "./Tank";
+import isNotNan from "@/utils/NotNan";
 
 const HomeScreen = () => {
     const navigation = useNavigation();
     const ref = useRef<BottomSheetRefProps>(null)
     const [modalVisible, setModalVisible] = useState(false);
-    const [selectedTank, setSelectedTank] = useState<TankCardProps>()
+    const [savedTank, setSavedTank] = useState<TankCardProps>()
     const { options, deleteOption, addOption} = useOptions();
     const { inputValue, handleInputChange } = useWeight();
+    const { selectedTank, selectTank } = useSelectedTank();
 
     const onPress = useCallback(() => {
         const isActive = ref?.current?.isActive()
@@ -51,7 +55,7 @@ const HomeScreen = () => {
 
     const handleTankPress = (tank: TankCardProps) => {
         console.log(tank.liters)
-        setSelectedTank(tank);
+        setSavedTank(tank);
         setModalVisible(true);
     };
 
@@ -60,12 +64,36 @@ const HomeScreen = () => {
     }
 
     const handleSavedTank = (name: string) =>{
-        addOption(selectedTank!.liters, name);
+        const tank = new Tank(
+            name, 
+            savedTank!.emptyWeight, 
+            savedTank!.liters, 
+            savedTank!.Icon)
+        addOption(tank, name);
         setModalVisible(false);
     }
 
     const handleDeleteTank = (name: string) => {
         deleteOption(name);
+    }
+
+    const fillPercent = getFillRate(
+        selectedTank?.emptyWeight || 1, 
+        parseNumber(inputValue), 
+        selectedTank?.liters || 1, ) * 100
+
+    let displayText = '';
+
+
+    if (isNotNan(fillPercent) && selectedTank) {
+        if (fillPercent >= 0 && fillPercent < 100) {
+            displayText = `Fyllingsgrad ${fillPercent.toFixed(1)} %`;
+        } else {
+            displayText = `Angi vekt mellom ${selectedTank.emptyWeight} og ${getMaxWeight(selectedTank.emptyWeight, selectedTank.liters).toFixed(1)} kg`;
+        }
+    }
+    else if(isNotNan(fillPercent) && !selectedTank){
+        displayText = "Velg en tank"
     }
 
     return (
@@ -87,6 +115,7 @@ const HomeScreen = () => {
                     <DropDown
                         deleteTank={handleDeleteTank}
                         options={options} 
+                        onSelect={selectTank}
                     />
                     </View>
                     <View style = {defaultStyles.inputfieldcontainer}>
@@ -98,16 +127,7 @@ const HomeScreen = () => {
                         </InputField>
                     </View>
                     <View style = {defaultStyles.inputfieldcontainer}>
-                        <Text style = {defaultStyles.text}>Fyllingsgrad {
-
-                            getFillRate(
-                                selectedTank?.emptyWeight || 1, 
-                                parseNumber(inputValue), 
-                                selectedTank?.liters || 1)
-                            * 100
-                            }
-                            %
-                        </Text>
+                        <Text style = {defaultStyles.text}>{displayText}</Text>
                     </View>
                 </View>
                 <TankNameModal 

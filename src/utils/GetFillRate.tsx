@@ -4,9 +4,14 @@ const propaneDensity = 0.493
 
 
 function getFillRate(emptyWeight: number, weight: number, volume: number){
-    console.log("\new: %s\nw: %s\nv: %s", emptyWeight, weight, volume)
     const propaneVol = (weight - emptyWeight) / propaneDensity
-    return roundDown(propaneVol / volume, 2) 
+    console.log("\new: %s\nw: %s\nv: %s\nresult: %s", emptyWeight, weight, volume, propaneVol / volume)
+    return propaneVol / volume
 }
 
-export default getFillRate
+function getMaxWeight(emptyWeight: number, volume: number){
+    const maxPropVol = volume * propaneDensity
+    return emptyWeight + maxPropVol
+}
+
+export {getFillRate, getMaxWeight}

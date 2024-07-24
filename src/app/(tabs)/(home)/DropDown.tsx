@@ -7,21 +7,25 @@ import { getAllData, getData, storeData } from "./DataBase";
 import useOptions from "./UseOptions";
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import Spacer from "./Spacer";
+import { TankCardProps } from "./TankCard";
+import Tank from "./Tank";
 
 type DropDownProps = {
-    options: { key: string; value: string }[]; // Options received from the parent
+    options: Tank[]; // Options received from the parent
     deleteTank: (key: string) => void;
+    onSelect: (tank: Tank) => void; // Add onSelect prop
 };
 
-export default function DropDown({ options, deleteTank }: DropDownProps) {
+export default function DropDown({ options, deleteTank, onSelect}: DropDownProps) {
     const [expanded, setExpanded] = useState(false);
     const toggleExpanded = useCallback(() => setExpanded(!expanded), [expanded])
     const [value, setValue] = useState("")
     
-    const onSelect = useCallback((item: {key: string}) => {
-        setValue(item.key)
-        setExpanded(false)
-    }, [])
+    const handleSelect = useCallback((item: Tank) => {
+        setValue(item.name);
+        setExpanded(false);
+        onSelect(item); 
+    }, [onSelect]);
 
     return (
         <View>
@@ -39,17 +43,17 @@ export default function DropDown({ options, deleteTank }: DropDownProps) {
             {expanded ? (
                 <View style = {inputstyles.options}>
                 <FlatList
-                    keyExtractor={(item) => item.key}
+                    keyExtractor={(item) => item.name}
                     data = {options}
                     renderItem={({item}) => (
                         <TouchableOpacity 
                             activeOpacity={0.8}
                             style = {inputstyles.optionItem}
-                            onPress={() => onSelect(item)}
+                            onPress={() => handleSelect(item)}
                         >
-                            <Text style = {inputstyles.optiontext}>{item.key}</Text>
-                            <Text style = {inputstyles.optionValuetext}>{item.value} L</Text>
-                            <TouchableOpacity onPress={() => deleteTank(item.key)}>
+                            <Text style = {inputstyles.optiontext}>{item.name}</Text>
+                            <Text style = {inputstyles.optionValuetext}>{item.liters} L</Text>
+                            <TouchableOpacity onPress={() => deleteTank(item.name)}>
                                 <Icon name="xmark" size={17} style = {inputstyles.removeButton}/>
                             </TouchableOpacity>
                         </TouchableOpacity>

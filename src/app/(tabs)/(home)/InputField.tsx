@@ -25,7 +25,6 @@ export const InputField: React.FC<InputFieldProps> = ({ label , value, onChange 
 
     const handleChangeText = (text: string) => {
         onChange(text);
-        console.log(text)
     };
 
     return (

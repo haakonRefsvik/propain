@@ -1,15 +1,11 @@
 import { useState, useEffect, useCallback } from "react";
 import { deleteData, getAllData, storeData } from "./DataBase";
+import Tank from "./Tank";
 
-
-interface Option {
-    key: string;
-    value: string;
-}
  
 // hook for the options in the dropDownMenu
 const useOptions = () => {
-    const [options, setOptions] = useState<Option[]>([]);
+    const [options, setOptions] = useState<Tank[]>([]);
 
     const updateOptions = useCallback(async () => {
         const storedData = await getAllData();
@@ -21,8 +17,8 @@ const useOptions = () => {
         updateOptions();
     }, [updateOptions]);
 
-    const addOption = useCallback((value: number, key: string) => {
-        storeData(value, key).then(() => {
+    const addOption = useCallback((tank: Tank, key: string) => {
+        storeData(key, tank).then(() => {
             updateOptions();
         })
     }, [updateOptions])

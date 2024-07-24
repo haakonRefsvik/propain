@@ -1,28 +1,26 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Tank from './Tank';
 
 
-// value: liters of the tank
-// key: users name of the tank
-const storeData = async (value: number, key: string) => {
-        try {
-      await AsyncStorage.setItem(key, value.toString());
-    } catch (e) {
-        throw e
-    }
-  };
+const storeData = async (key: string, tank: Tank) => {
+  try {
+      const jsonString = JSON.stringify(tank);
+      await AsyncStorage.setItem(key, jsonString);
+  } catch (error) {
+      console.error('Error storing object', error);
+  }
+};
 
 const getData = async (key: string) => {
-    try {
-      const value = await AsyncStorage.getItem(key);
-      if (value !== null) {
-        console.log("data found", value)
-      }
-      else{
-        console.log("no data found...")
-      }
-    } catch (e) {
-        throw e
+  try {
+    const jsonString = await AsyncStorage.getItem(key);
+    if (jsonString != null) {
+        return JSON.parse(jsonString);
     }
+    return null;
+  } catch (error) {
+      console.error('Error retrieving object', error);
+  }
 };
 
 const deleteData = async(key: string) => {
@@ -33,15 +31,33 @@ const deleteData = async(key: string) => {
   }
 }
 
-const getAllData = async () => {
+const getAllData = async (): Promise<Tank[]> => {
   try {
-      const keys = await AsyncStorage.getAllKeys()
-      const items = await AsyncStorage.multiGet(keys)
+    // Get all keys from AsyncStorage
+    const keys = await AsyncStorage.getAllKeys();
+    
+    // Retrieve all values associated with the keys
+    const items = await AsyncStorage.multiGet(keys);
 
-      return items.map(([key, value]) => ({ key, value: value ? JSON.parse(value) : null }));
+    // Filter and parse each value from JSON string to Tank object
+    const tanks = items
+      .map(([key, value]) => {
+        try {
+          // Parse the JSON string
+          const parsedValue = value ? JSON.parse(value) : null;
+          // Cast the parsed value to Tank if it is not null
+          return parsedValue ? Object.assign(new Tank('', 0, 0, () => <></>), parsedValue) : null;
+        } catch (error) {
+          console.error(`Error parsing JSON for key "${key}":`, error);
+          return null;
+        }
+      })
+      .filter(tank => tank !== null) as Tank[]; // Filter out any null values
 
+    return tanks;
   } catch (error) {
-      console.log(error, "problem")
+    console.error("Error retrieving data from AsyncStorage:", error);
+    return [];  // Return an empty array in case of error
   }
 };
 
