@@ -1,5 +1,5 @@
 import { colors } from "@/constants/tokens";
-import { TankIcon12L, TankIcon18L, TankIcon24L, TankIcon26L, TankIcon27L, TankIcon33L } from "../src/app/(tabs)/(home)/TankSVG";
+import { TankIcon12L, TankIcon18L, TankIcon24L, TankIcon26L, TankIcon27L, TankIcon33L } from "./TankSVG";
 
 const tanksData = [
     { liters: 12.5, emptyWeight: 3.4, svgColor: colors.primary, Icon: TankIcon12L},

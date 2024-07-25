@@ -3,12 +3,12 @@ import React, { useCallback, useEffect, useState } from "react";
 import { TouchableOpacity, View, Text, FlatList, StyleSheet} from "react-native";
 import {AntDesign} from "@expo/vector-icons"
 import { colors, fontSize, opacity } from "@/constants/tokens";
-import { getAllData, getData, storeData } from "./DataBase";
-import useOptions from "./UseOptions";
+import { getAllData, getData, storeData } from "../data/DataBase";
+import useOptions from "../hooks/UseOptions";
 import Icon from 'react-native-vector-icons/FontAwesome6';
 import Spacer from "./Spacer";
 import { TankCardProps } from "./TankCard";
-import Tank from "./Tank";
+import Tank from "../constants/Tank";
 
 type DropDownProps = {
     options: Tank[]; // Options received from the parent

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { deleteData, getAllData, storeData } from "./DataBase";
-import Tank from "./Tank";
+import { deleteData, getAllData, storeData } from "../data/DataBase";
+import Tank from "../constants/Tank";
 
  
 // hook for the options in the dropDownMenu

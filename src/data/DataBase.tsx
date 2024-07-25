@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Tank from './Tank';
+import Tank from '../constants/Tank';
 
 
 const storeData = async (key: string, tank: Tank) => {

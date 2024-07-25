@@ -2,26 +2,26 @@ import { defaultStyles } from "@/styles"
 import { Button, StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity} from "react-native"
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
-import DropDown from "./DropDown";
+import DropDown from "../../../components/DropDown";
 import { StatusBar } from "expo-status-bar";
-import { InputField } from "./InputField";
+import { InputField } from "../../../components/InputField";
 import { useNavigation } from "expo-router";
 import { colors, fontSize } from "@/constants/tokens";
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import TankNameModal from "./Modal";
-import BottomSheet, { BottomSheetRefProps, MAX_Y } from "./BottomSheet";
-import { TankCardProps } from "./TankCard";
-import useOptions from "./UseOptions";
-import { storeData } from "./DataBase";
+import TankNameModal from "../../../components/TankModal";
+import BottomSheet, { BottomSheetRefProps, MAX_Y } from "../../../components/BottomSheet";
+import { TankCardProps } from "../../../components/TankCard";
+import useOptions from "../../../hooks/UseOptions";
+import { storeData } from "../../../data/DataBase";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import TankList from "./TankList";
+import TankList from "../../../components/TankList";
 import tanksData from "../../../../assets/TankData";
-import useWeight from "./UseWeight";
+import useWeight from "../../../hooks/UseWeight";
 import {getFillRate, getMaxWeight} from "@/utils/GetFillRate";
 import parseNumber from "@/utils/ParseNumber";
-import useSelectedTank from "./UseSelectedTank";
-import Tank from "./Tank";
+import useSelectedTank from "../../../hooks/UseSelectedTank";
 import isNotNan from "@/utils/NotNan";
+import Tank from "@/constants/Tank";
 
 const HomeScreen = () => {
     const navigation = useNavigation();

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TankCardProps } from './TankCard';
+import { TankCardProps } from '../components/TankCard';
 import Svg, { Path, SvgProps } from 'react-native-svg';
 
 class Tank implements TankCardProps {
