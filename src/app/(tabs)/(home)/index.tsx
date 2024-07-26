@@ -1,6 +1,6 @@
 import { defaultStyles } from "@/styles"
 import { Button, StyleSheet, Text, View, ScrollView, TextInput, TouchableOpacity} from "react-native"
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react"
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
 import { SafeAreaView } from "react-native-safe-area-context"
 import DropDown from "../../../components/DropDown";
 import { StatusBar } from "expo-status-bar";
@@ -22,10 +22,14 @@ import parseNumber from "@/utils/ParseNumber";
 import useSelectedTank from "../../../hooks/UseSelectedTank";
 import isNotNan from "@/utils/NotNan";
 import Tank from "@/constants/Tank";
+import TankVisual, { TankRefProps } from "@/components/TankVisual";
+import Spacer from "@/components/Spacer";
+import getGrillHours from "@/utils/GetGrillHours";
 
 const HomeScreen = () => {
     const navigation = useNavigation();
     const ref = useRef<BottomSheetRefProps>(null)
+    const tankRef = useRef<TankRefProps>(null)
     const [modalVisible, setModalVisible] = useState(false);
     const [savedTank, setSavedTank] = useState<TankCardProps>()
     const { options, deleteOption, addOption} = useOptions();
@@ -42,6 +46,8 @@ const HomeScreen = () => {
         }
     }, []);
 
+
+    
     useLayoutEffect(() => {
         navigation.setOptions({
             headerTitle: 'Hjem',
@@ -52,47 +58,60 @@ const HomeScreen = () => {
             ),
         });
     }, [navigation, onPress]);
-
+    
     const handleTankPress = (tank: TankCardProps) => {
         console.log(tank.liters)
         setSavedTank(tank);
         setModalVisible(true);
     };
-
+    
     const handleCloseModal = () => {
         setModalVisible(false)
     }
-
+    
     const handleSavedTank = (name: string) =>{
         const tank = new Tank(
             name, 
             savedTank!.emptyWeight, 
             savedTank!.liters, 
             savedTank!.Icon)
-        addOption(tank, name);
-        setModalVisible(false);
+            addOption(tank, name);
+            setModalVisible(false);
     }
-
+        
     const handleDeleteTank = (name: string) => {
         deleteOption(name);
     }
-
+    
     const fillPercent = getFillRate(
         selectedTank?.emptyWeight || 1, 
         parseNumber(inputValue), 
         selectedTank?.liters || 1, ) * 100
 
+        
+        useEffect(() => {
+            if (tankRef.current && isValidNumber) {
+                tankRef.current.fillTo(fillPercent);
+            }
+        }, [fillPercent]);
+        
+    const grillHours = getGrillHours(selectedTank?.emptyWeight || 1, parseNumber(inputValue))
+        
     let displayText = '';
+    let grillHourText = '';
 
+    const isNumber = isNotNan(fillPercent) && selectedTank
+    const isValidNumber = isNumber && fillPercent >= 0 && fillPercent < 100
+    const tankNotChosen = isNotNan(fillPercent) && !selectedTank
 
-    if (isNotNan(fillPercent) && selectedTank) {
-        if (fillPercent >= 0 && fillPercent < 100) {
-            displayText = `Fyllingsgrad ${fillPercent.toFixed(1)} %`;
-        } else {
-            displayText = `Angi vekt mellom ${selectedTank.emptyWeight} og ${getMaxWeight(selectedTank.emptyWeight, selectedTank.liters).toFixed(1)} kg`;
-        }
+    if (isValidNumber) {
+        displayText = `${fillPercent.toFixed(1)} %`;
+        grillHourText = `🔥 ${grillHours.low.toFixed(0)} timer\n🔥🔥 ${grillHours.med.toFixed(0)} timer\n🔥🔥🔥${grillHours.high.toFixed(0)} timer`;
+    } else if(isNumber) {
+        displayText = `Angi vekt mellom ${selectedTank.emptyWeight} og ${getMaxWeight(selectedTank.emptyWeight, selectedTank.liters).toFixed(1)} kg`;
     }
-    else if(isNotNan(fillPercent) && !selectedTank){
+    
+    if(tankNotChosen){
         displayText = "Velg en tank"
     }
 
@@ -108,6 +127,7 @@ const HomeScreen = () => {
                 ></TankList>
             </BottomSheet>
             
+
             <SafeAreaView style={defaultStyles.container}>
                 <View style = {defaultStyles.container}>
                     <StatusBar style = "light"/>
@@ -126,8 +146,32 @@ const HomeScreen = () => {
                             >
                         </InputField>
                     </View>
-                    <View style = {defaultStyles.inputfieldcontainer}>
-                        <Text style = {defaultStyles.text}>{displayText}</Text>
+                    <View 
+                        style = {{
+                            width: 180,
+                            top: 200,
+                            start: 30,
+                            paddingHorizontal: 20,
+                            position: "absolute",
+                            alignContent: "center",
+                            alignItems: "center",
+                            flexDirection: "row",
+                        }}
+                        >
+                        <TankVisual ref = {tankRef}>
+                            <Text 
+                                style = {{
+                                    fontSize: fontSize.lg,
+                                    color: colors.text,
+                                    fontWeight: "700"
+                                }}>
+                                {displayText}
+                            </Text>
+                        </TankVisual>
+                        <Spacer size={25} horizontal></Spacer>
+                        <Text style = {{fontSize: fontSize.sm, color: colors.text}}>
+                            {grillHourText}
+                        </Text>
                     </View>
                 </View>
                 <TankNameModal 
