@@ -7,6 +7,7 @@ export const colors = {
 	maximumTrackTintColor: 'rgba(255,255,255,0.4)',
 	minimumTrackTintColor: 'rgba(255,255,255,0.6)',
 	container: "#131313",
+	containerDark: "#0a0a0a",
 	sheetContainer: "#1F1F1F",
 }
 

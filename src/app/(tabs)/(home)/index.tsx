@@ -25,6 +25,7 @@ import Tank from "@/constants/Tank";
 import TankVisual, { TankRefProps } from "@/components/TankVisual";
 import Spacer from "@/components/Spacer";
 import getGrillHours from "@/utils/GetGrillHours";
+import CircularSlider from "@/components/CircularSlider";
 
 const HomeScreen = () => {
     const navigation = useNavigation();
@@ -60,9 +61,10 @@ const HomeScreen = () => {
     }, [navigation, onPress]);
     
     const handleTankPress = (tank: TankCardProps) => {
-        console.log(tank.liters)
+        console.log("lagrer tank med " + tank.emptyWeight + " i ew")
         setSavedTank(tank);
         setModalVisible(true);
+        console.log(savedTank?.emptyWeight)
     };
     
     const handleCloseModal = () => {
@@ -88,12 +90,14 @@ const HomeScreen = () => {
         parseNumber(inputValue), 
         selectedTank?.liters || 1, ) * 100
 
-        
-        useEffect(() => {
-            if (tankRef.current && isValidNumber) {
-                tankRef.current.fillTo(fillPercent);
-            }
-        }, [fillPercent]);
+    useEffect(() => {
+        if (tankRef.current && isValidNumber) {
+            tankRef.current.fillTo(fillPercent);
+        }
+        else{
+            tankRef.current!.fillTo(0)
+        }
+    }, [fillPercent]);
         
     const grillHours = getGrillHours(selectedTank?.emptyWeight || 1, parseNumber(inputValue))
         
@@ -169,9 +173,7 @@ const HomeScreen = () => {
                             </Text>
                         </TankVisual>
                         <Spacer size={25} horizontal></Spacer>
-                        <Text style = {{fontSize: fontSize.sm, color: colors.text}}>
-                            {grillHourText}
-                        </Text>
+                        <CircularSlider options={["bais"]}></CircularSlider>
                     </View>
                 </View>
                 <TankNameModal 

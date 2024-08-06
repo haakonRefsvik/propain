@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Modal as CustomModal} from 'react-native';
 import { colors, fontSize } from '@/constants/tokens';
 import Spacer from './Spacer';
@@ -11,6 +11,11 @@ interface TankNameModalProps {
 
 const TankNameModal: React.FC<TankNameModalProps> = ({ visible, onClose, onSave }) => {
     const [tankName, setTankName] = useState('');
+
+    const handleSelect = useCallback((tankName: string) => {
+        onSave(tankName)
+        setTankName('')
+    }, []);
 
     return (
         <CustomModal 
@@ -30,7 +35,7 @@ const TankNameModal: React.FC<TankNameModalProps> = ({ visible, onClose, onSave 
                     />
                     <View style={styles.buttonContainer}>
                         <Button color = {colors.maximumTrackTintColor} title="Avbryt" onPress={onClose} />
-                        <Button color = {colors.primary} title="Lagre" onPress={() => onSave(tankName)} />
+                        <Button color = {colors.primary} title="Lagre" onPress={() => handleSelect(tankName)} />
                     </View>
                 </View>
             </View>

@@ -88,6 +88,7 @@ export const inputstyles = StyleSheet.create({
     optiontext: {
         color: colors.text,
         fontSize: fontSize.sm,
+        opacity: opacity.high,
         width: "20%"
     },
     optionValuetext: {
@@ -106,7 +107,7 @@ export const inputstyles = StyleSheet.create({
     options: {
         position: "absolute",
         top: 53, 
-        backgroundColor: colors.container,
+        backgroundColor: colors.sheetContainer,
         width: "100%",
         padding: 20,
         borderRadius: 6,
