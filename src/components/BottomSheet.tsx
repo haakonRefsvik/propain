@@ -23,7 +23,6 @@ const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProps> (
         return active.value;
     }, [])
 
-    
     const context = useSharedValue({y: 0})
     const scrollTo = useCallback((destination: number) => {
         "worklet";

@@ -61,24 +61,32 @@ const HomeScreen = () => {
     }, [navigation, onPress]);
     
     const handleTankPress = (tank: TankCardProps) => {
-        console.log("lagrer tank med " + tank.emptyWeight + " i ew")
         setSavedTank(tank);
         setModalVisible(true);
-        console.log(savedTank?.emptyWeight)
     };
-    
+
     const handleCloseModal = () => {
         setModalVisible(false)
     }
+
+    useEffect(() => {
+        console.log(savedTank?.emptyWeight);
+    }, [savedTank]);
     
     const handleSavedTank = (name: string) =>{
-        const tank = new Tank(
-            name, 
-            savedTank!.emptyWeight, 
-            savedTank!.liters, 
-            savedTank!.Icon)
-            addOption(tank, name);
-            setModalVisible(false);
+        if(!savedTank){
+            console.log("bais")
+        }
+        else{
+            const tank = new Tank(
+                name, 
+                savedTank!.emptyWeight, 
+                savedTank!.liters, 
+                savedTank!.Icon)
+                addOption(tank, name);
+                setModalVisible(false);
+
+        }
     }
         
     const handleDeleteTank = (name: string) => {
