@@ -15,7 +15,7 @@ const TankNameModal: React.FC<TankNameModalProps> = ({ visible, onClose, onSave 
     const handleSelect = useCallback((tankName: string) => {
         onSave(tankName)
         setTankName('')
-    }, []);
+    }, [onSave]);
 
     return (
         <CustomModal 

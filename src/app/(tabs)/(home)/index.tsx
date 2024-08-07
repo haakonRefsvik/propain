@@ -68,10 +68,6 @@ const HomeScreen = () => {
     const handleCloseModal = () => {
         setModalVisible(false)
     }
-
-    useEffect(() => {
-        console.log(savedTank?.emptyWeight);
-    }, [savedTank]);
     
     const handleSavedTank = (name: string) =>{
         if(!savedTank){
