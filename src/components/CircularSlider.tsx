@@ -9,31 +9,16 @@ import { defaultStyles } from "@/styles";
 import Icon from 'react-native-vector-icons/FontAwesome6';
 
 interface CircularSliderProps {
-    options: [string]
+    onSettingChange: (setting: string) => void;
 }
 
-enum SettingType {
-    Low = "Low",
-    Medium = "Medium",
-    High = "High"
-}
-
-// Create a degree map
-const degreeMap: { [degree: number]: SettingType } = {
-    0: SettingType.Low,
-    90: SettingType.Medium,
-    180: SettingType.High
-};
-
-
-const CircularSlider: React.FC<CircularSliderProps> = ({options}) => {
+const CircularSlider: React.FC<CircularSliderProps> = ({onSettingChange}) => {
     const translateY = useSharedValue(0)
     const context = useSharedValue({y: 0})
-    const textOpacity = useSharedValue(0.5); // Initial opacity of the text
     
     const chosenSetting = useDerivedValue(() => {
         return closest(translateY.value % 360, [0, 90, -90]);
-    });
+    }, [translateY]);
     
     const scrollTo = useCallback((destination: number) => {
         "worklet";
@@ -46,7 +31,6 @@ const CircularSlider: React.FC<CircularSliderProps> = ({options}) => {
         context.value = { y: translateY.value }
     })
     .onUpdate(({ translationY }) => {
-        
         translateY.value = (translationY % 360 )+ context.value.y
     })
     .onEnd(() => {
@@ -159,8 +143,4 @@ const styles = StyleSheet.create({
 function closest(num: number, arr: [number, number, number]) {
     "worklet"
     return arr.reduce((prev, curr) => Math.abs(curr - num) < Math.abs(prev - num) ? curr : prev);
-}
-// Function to get the setting from the degree map
-function getSetting(degree: number): SettingType | null {
-    return degreeMap[degree];
 }

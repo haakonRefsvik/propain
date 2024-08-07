@@ -88,6 +88,10 @@ const HomeScreen = () => {
     const handleDeleteTank = (name: string) => {
         deleteOption(name);
     }
+
+    const handleKnobChange = (setting: string) => {
+        console.log(setting)
+    }
     
     const fillPercent = getFillRate(
         selectedTank?.emptyWeight || 1, 
@@ -177,7 +181,7 @@ const HomeScreen = () => {
                             </Text>
                         </TankVisual>
                         <Spacer size={25} horizontal></Spacer>
-                        <CircularSlider options={["bais"]}></CircularSlider>
+                        <CircularSlider onSettingChange={handleKnobChange}></CircularSlider>
                     </View>
                 </View>
                 <TankNameModal 
