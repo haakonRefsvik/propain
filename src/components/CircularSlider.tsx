@@ -1,45 +1,53 @@
 import {Dimensions, StyleSheet, Text, View} from "react-native"
-import React, { useCallback, useEffect, useImperativeHandle } from "react"
+import React, { useCallback, useEffect, useImperativeHandle, useState } from "react"
 import Spacer from "./Spacer";
-import Animated, { useAnimatedStyle, useDerivedValue, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
+import Animated, { runOnJS, useAnimatedStyle, useDerivedValue, useSharedValue, withSpring, withTiming } from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { colors, fontSize, opacity } from "@/constants/tokens";
 import { SCREEN_HEIGHT } from "@gorhom/bottom-sheet";
 import { defaultStyles } from "@/styles";
 import Icon from 'react-native-vector-icons/FontAwesome6';
+import { KnobOption, getClosestOption } from "@/utils/Setting";
+import closestDegreeWorklet from "@/utils/GetClosestDegree";
 
 interface CircularSliderProps {
-    onSettingChange: (setting: string) => void;
+    knobPosition: number;
+    onPositionChange: (degree: number) => void;
 }
 
-const CircularSlider: React.FC<CircularSliderProps> = ({onSettingChange}) => {
-    const translateY = useSharedValue(0)
+const CircularSlider = (props: CircularSliderProps) => {
+    const { knobPosition, onPositionChange } = props;
+    const knobRotation = useSharedValue(knobPosition)
     const context = useSharedValue({y: 0})
+    const lowDeg = KnobOption.Low.degree
+    const medDeg = KnobOption.Medium.degree
+    const highDeg = KnobOption.High.degree
+
+    const closestSetting = useDerivedValue(() => {
+        const newSetting = closestDegreeWorklet(knobRotation.value % 360, [lowDeg, medDeg, highDeg]);
+        return newSetting;
+    }, [knobRotation]);
     
-    const chosenSetting = useDerivedValue(() => {
-        return closest(translateY.value % 360, [0, 90, -90]);
-    }, [translateY]);
-    
-    const scrollTo = useCallback((destination: number) => {
+    const turnTo = useCallback((destination: number) => {
         "worklet";
-        
-        translateY.value = withSpring(destination, {damping: 70, stiffness: 700})
+        runOnJS(onPositionChange)(destination);     // make parent know the current position of the knob
+        knobRotation.value = withSpring(destination, {damping: 70, stiffness: 700})
     }, [])
-    
+
     const gesture = Gesture.Pan()
     .onStart(() =>{
-        context.value = { y: translateY.value }
+        context.value = { y: knobRotation.value }
     })
     .onUpdate(({ translationY }) => {
-        translateY.value = (translationY % 360 )+ context.value.y
+        knobRotation.value = (translationY % 360 )+ context.value.y
     })
     .onEnd(() => {
-        scrollTo(chosenSetting.value)
+        turnTo(closestSetting.value)
     })
     
     const AnimationStyle = useAnimatedStyle (() => {
         return {
-            transform: [{rotateZ: `${translateY.value}deg` }]
+            transform: [{rotateZ: `${knobRotation.value}deg` }]
         } 
     });
     
@@ -48,21 +56,21 @@ const CircularSlider: React.FC<CircularSliderProps> = ({onSettingChange}) => {
     
     const lowTextStyle = useAnimatedStyle(() => {
         return {
-            color: chosenSetting.value === -90 ? chosenTextColor : idleTextColor,
+            color: closestSetting.value === lowDeg ? chosenTextColor : idleTextColor,
             ...styles.lowtext
         };
     });
     
     const medTextStyle = useAnimatedStyle(() => {
         return {
-            color: chosenSetting.value === 0 ? chosenTextColor : idleTextColor,
+            color: closestSetting.value === medDeg ? chosenTextColor : idleTextColor,
             ...styles.medtext
         };
     });
     
     const highTextStyle = useAnimatedStyle(() => {
         return {
-            color: chosenSetting.value === 90 ? chosenTextColor : idleTextColor,
+            color: closestSetting.value === highDeg ? chosenTextColor : idleTextColor,
             ...styles.hightext
         };
     });
@@ -80,12 +88,12 @@ const CircularSlider: React.FC<CircularSliderProps> = ({onSettingChange}) => {
                             <Text></Text>
                         </Animated.View>
                 </GestureDetector>
+                <Spacer size={50}></Spacer>
             </View>
             <Animated.Text style={[styles.text, highTextStyle]}> HIGH </Animated.Text>
         </View>
     )
 }
-
 
 export default CircularSlider
 
@@ -139,8 +147,3 @@ const styles = StyleSheet.create({
         borderRadius: 3
     }
 }) 
-
-function closest(num: number, arr: [number, number, number]) {
-    "worklet"
-    return arr.reduce((prev, curr) => Math.abs(curr - num) < Math.abs(prev - num) ? curr : prev);
-}

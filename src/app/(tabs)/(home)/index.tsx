@@ -9,10 +9,9 @@ import { useNavigation } from "expo-router";
 import { colors, fontSize } from "@/constants/tokens";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import TankNameModal from "../../../components/TankModal";
-import BottomSheet, { BottomSheetRefProps, MAX_Y } from "../../../components/BottomSheet";
 import { TankCardProps } from "../../../components/TankCard";
+import BottomSheet, { BottomSheetRefProps, MAX_Y } from "../../../components/BottomSheet";
 import useOptions from "../../../hooks/UseOptions";
-import { storeData } from "../../../data/DataBase";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import TankList from "../../../components/TankList";
 import tanksData from "../../../../assets/TankData";
@@ -26,17 +25,21 @@ import TankVisual, { TankRefProps } from "@/components/TankVisual";
 import Spacer from "@/components/Spacer";
 import getGrillHours from "@/utils/GetGrillHours";
 import CircularSlider from "@/components/CircularSlider";
+import {KnobOption, getClosestOption} from "@/utils/Setting";
+import getMinutesFromHour from "@/utils/GetMinutesFromHour";
 
 const HomeScreen = () => {
     const navigation = useNavigation();
     const ref = useRef<BottomSheetRefProps>(null)
     const tankRef = useRef<TankRefProps>(null)
+    const [knobPosition, setKnobPosition] = useState<number>(0); // Initialize with your default option
     const [modalVisible, setModalVisible] = useState(false);
     const [savedTank, setSavedTank] = useState<TankCardProps>()
     const { options, deleteOption, addOption} = useOptions();
     const { inputValue, handleInputChange } = useWeight();
     const { selectedTank, selectTank } = useSelectedTank();
-
+    const [grillHour, setGrillHour] = useState<number>(0);
+    
     const onPress = useCallback(() => {
         const isActive = ref?.current?.isActive()
         if(isActive){
@@ -46,8 +49,6 @@ const HomeScreen = () => {
             ref?.current?.scrollTo(MAX_Y);
         }
     }, []);
-
-
     
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -70,29 +71,23 @@ const HomeScreen = () => {
     }
     
     const handleSavedTank = (name: string) =>{
-        if(!savedTank){
-            console.log("bais")
+        const tank = new Tank(
+            name, 
+            savedTank!.emptyWeight, 
+            savedTank!.liters, 
+            savedTank!.Icon)
+            addOption(tank, name);
+            setModalVisible(false);
         }
-        else{
-            const tank = new Tank(
-                name, 
-                savedTank!.emptyWeight, 
-                savedTank!.liters, 
-                savedTank!.Icon)
-                addOption(tank, name);
-                setModalVisible(false);
-
-        }
-    }
         
     const handleDeleteTank = (name: string) => {
         deleteOption(name);
     }
 
-    const handleKnobChange = (setting: string) => {
-        console.log(setting)
-    }
-    
+    const handleKnobPositionChange = (newPosition: number) => {
+        setKnobPosition(newPosition);
+    };
+        
     const fillPercent = getFillRate(
         selectedTank?.emptyWeight || 1, 
         parseNumber(inputValue), 
@@ -106,9 +101,13 @@ const HomeScreen = () => {
             tankRef.current!.fillTo(0)
         }
     }, [fillPercent]);
-        
-    const grillHours = getGrillHours(selectedTank?.emptyWeight || 1, parseNumber(inputValue))
-        
+
+    useEffect(() => {
+        const opt = getClosestOption(knobPosition)
+        const hours = getGrillHours(selectedTank?.emptyWeight || 1, parseNumber(inputValue) || 1, opt)
+        setGrillHour(hours)
+    }, [knobPosition, fillPercent]);
+
     let displayText = '';
     let grillHourText = '';
 
@@ -117,15 +116,19 @@ const HomeScreen = () => {
     const tankNotChosen = isNotNan(fillPercent) && !selectedTank
 
     if (isValidNumber) {
+        const min = getMinutesFromHour(grillHour)
         displayText = `${fillPercent.toFixed(1)} %`;
-        grillHourText = `🔥 ${grillHours.low.toFixed(0)} timer\n🔥🔥 ${grillHours.med.toFixed(0)} timer\n🔥🔥🔥${grillHours.high.toFixed(0)} timer`;
+        grillHourText = `${Math.floor(grillHour)} timer\n${Math.floor(min)} minutter`
     } else if(isNumber) {
-        displayText = `Angi vekt mellom ${selectedTank.emptyWeight} og ${getMaxWeight(selectedTank.emptyWeight, selectedTank.liters).toFixed(1)} kg`;
+        const minWeight = selectedTank.emptyWeight;
+        const maxWeight = getMaxWeight(minWeight, selectedTank.liters).toFixed(1);
+        displayText = `Angi vekt mellom ${minWeight} og ${maxWeight} kg`;
     }
     
     if(tankNotChosen){
         displayText = "Velg en tank"
     }
+    
 
     return (
         <GestureHandlerRootView>
@@ -181,7 +184,16 @@ const HomeScreen = () => {
                             </Text>
                         </TankVisual>
                         <Spacer size={25} horizontal></Spacer>
-                        <CircularSlider onSettingChange={handleKnobChange}></CircularSlider>
+                        <View>
+                            <CircularSlider
+                                knobPosition={knobPosition}  // Pass current knob position
+                                onPositionChange={handleKnobPositionChange} // Pass the handler
+                            />                            
+                            <Text style = {{
+                                fontSize: fontSize.sm,
+                                color: "grey"
+                            }}>{grillHourText}</Text>    
+                        </View>
                     </View>
                 </View>
                 <TankNameModal 
