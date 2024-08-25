@@ -109,7 +109,7 @@ const HomeScreen = () => {
     }, [knobPosition, fillPercent]);
 
     let displayText = '';
-    let grillHourText = '';
+    let grillHourText = '\n';
 
     const isNumber = isNotNan(fillPercent) && selectedTank
     const isValidNumber = isNumber && fillPercent >= 0 && fillPercent < 100
@@ -189,6 +189,7 @@ const HomeScreen = () => {
                                 knobPosition={knobPosition}  // Pass current knob position
                                 onPositionChange={handleKnobPositionChange} // Pass the handler
                             />                            
+                            <Spacer size={24}></Spacer>
                             <Text style = {{
                                 fontSize: fontSize.sm,
                                 color: "grey"
