@@ -6,7 +6,7 @@ Appen regner ut hvor mye gass bruker har igjen i tank som er av typen Hexacon-Ra
 
 Denne appen ble utviklet som et sommerprosjekt for å lære React Native og utforske mobilapputvikling 
 på fritiden mens jeg jobbet fulltid. Målet med prosjektet var å få praktisk erfaring med React Native, samtidig som
-jeg skapte en enkel, men funksjonell app. Siden dette var et læringsprosjekt, er appen ikke veldig avansert.
+jeg skapte en enkel, men funksjonell app. 
 
 Appen inkluderer grunnleggende funksjonaliteter og brukergrensesnitt, som jeg designet for å forstå hvordan
 man håndterer tilstandsforvaltning, navigasjon, og komponentstrukturering i React Native. 
