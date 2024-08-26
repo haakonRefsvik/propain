@@ -1,21 +1,32 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet, Modal as CustomModal} from 'react-native';
 import { colors, fontSize } from '@/constants/tokens';
 import Spacer from './Spacer';
+import Tank from '@/constants/Tank';
 
 interface TankNameModalProps {
+    existingTanks: Tank[],
     visible: boolean;
     onClose: () => void;
     onSave: (name: string) => void;
 }
 
-const TankNameModal: React.FC<TankNameModalProps> = ({ visible, onClose, onSave }) => {
+const TankNameModal: React.FC<TankNameModalProps> = ({ existingTanks, visible, onClose, onSave }) => {
     const [tankName, setTankName] = useState('');
+    const [validName, setNameValid] = useState(true);
 
     const handleSelect = useCallback((tankName: string) => {
         onSave(tankName)
         setTankName('')
     }, [onSave]);
+
+    useEffect(() => {
+        if(existingTanks.find(tank => tank.name.toLowerCase() == tankName.trim().toLowerCase())){
+            setNameValid(false)
+            return
+        }
+        setNameValid(true)
+    }, [tankName])
 
     return (
         <CustomModal 
@@ -33,9 +44,17 @@ const TankNameModal: React.FC<TankNameModalProps> = ({ visible, onClose, onSave 
                         value={tankName}
                         onChangeText={setTankName}
                     />
+                    <View style = {styles.invalidNameContainer}>
+                        {!validName && <Text style = {styles.invalidNameText}>Du har allerede en tank med dette navnet</Text>}
+                    </View>
                     <View style={styles.buttonContainer}>
                         <Button color = {colors.maximumTrackTintColor} title="Avbryt" onPress={onClose} />
-                        <Button color = {colors.primary} title="Lagre" onPress={() => handleSelect(tankName)} />
+                        <Button 
+                            color = {colors.primary} 
+                            title="Lagre" 
+                            onPress={() => handleSelect(tankName)} 
+                            disabled = {!validName}
+                        />
                     </View>
                 </View>
             </View>
@@ -57,6 +76,17 @@ const styles = StyleSheet.create({
         borderRadius: 20,
         alignItems: 'center',
         justifyContent: "center"
+    },
+    invalidNameContainer: {
+        width: "100%",
+        height: 20
+    },
+    invalidNameText: {
+        bottom: 10,
+        fontSize: fontSize.xs,
+        color: colors.errorColor,
+        alignSelf: "flex-start",
+        paddingHorizontal: 5
     },
     modalTitle: {
         fontSize: fontSize.lg,
