@@ -1,7 +1,8 @@
 
 https://github.com/user-attachments/assets/631a41c1-cdda-4d85-9d15-dd349673941e
 
-Denne appen er utviklet med React Native og Expo, og er kodet ved bruk av Visual Studio Code.
+Denne appen er utviklet med React Native og Expo, og er kodet ved bruk av Visual Studio Code. 
+Den benytter Async storage for å lagre tankene som brukeren har lagt til.
 Appen regner ut hvor mye gass bruker har igjen i tank som er av typen Hexacon-Ragasco. Disse tankene kommer i 6 modeller.  
 
 Denne appen ble utviklet som et sommerprosjekt for å lære React Native og utforske mobilapputvikling 
