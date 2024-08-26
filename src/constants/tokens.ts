@@ -9,6 +9,7 @@ export const colors = {
 	container: "#131313",
 	containerDark: "#0a0a0a",
 	sheetContainer: "#1F1F1F",
+	errorColor: "#fc663c"
 }
 
 export const fontSize = {
