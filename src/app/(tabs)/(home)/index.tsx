@@ -197,8 +197,8 @@ const HomeScreen = () => {
                         </View>
                     </View>
                 </View>
-                <TankNameModal 
-                    existingTanks={options}
+                <TankNameModal
+                    existingTanks={options} 
                     visible={modalVisible} 
                     onClose={handleCloseModal} 
                     onSave={handleSavedTank}
