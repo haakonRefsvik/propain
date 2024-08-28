@@ -6,17 +6,23 @@ import Animated from "react-native-reanimated";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import { colors, fontSize, opacity } from "@/constants/tokens";
 import { defaultStyles } from "@/styles";
+import Svg, { Path, SvgProps } from 'react-native-svg';
+import MaskedView from "@react-native-masked-view/masked-view";
 
-type TankProps = {children: React.ReactNode}
+type TankProps = {
+    children: React.ReactNode
+    Icon: React.FC<SvgProps & { color?: string }>;
+}
 
 export const maxHeight = 300
 export const tankWidth = 170
 
 export type TankRefProps = {
     fillTo: (percent: number) => void;
+
 }
 const TankVisual = React.forwardRef<TankRefProps, TankProps> (
-    ({children}, ref, ) => {
+    ({children, Icon}, ref, ) => {
 
         const height = useSharedValue(0);
 
@@ -52,24 +58,32 @@ const TankVisual = React.forwardRef<TankRefProps, TankProps> (
                 }}>
                     {children}
                 </View>
-                    <View                 
-                        style = {{
-                            backgroundColor: colors.container,
-                            width : tankWidth,
-                            height: maxHeight,
-                            borderRadius: 25,
-                            overflow: "hidden",
-                        }}>
-                        <Animated.View 
-                            style = {[{
+                    <MaskedView
+                        style={{ height: maxHeight, width: tankWidth, }}
+                        maskElement={ 
+                        <View style={{ flex: 1, backgroundColor: "transparent"}}>
+                            <Icon height="100%" width="100%" color={"red"}/>
+                        </View>}
+                    >
+                        <View                 
+                            style = {{
+                                backgroundColor: colors.container,
                                 width : tankWidth,
-                                height: height,
-                                backgroundColor: colors.primary,
-                                borderRadius: 0,
-                                opacity: 0.9,
-                            }, animatedStyle]}>
-                        </Animated.View>
-                    </View>                    
+                                height: maxHeight,
+                                borderRadius: 25,
+                                overflow: "hidden",
+                            }}>
+                            <Animated.View 
+                                style = {[{
+                                    width : tankWidth,
+                                    height: height,
+                                    backgroundColor: colors.primary,
+                                    borderRadius: 0,
+                                    opacity: 0.9,
+                                }, animatedStyle]}>
+                            </Animated.View>
+                        </View>                    
+                    </MaskedView>
             </View>
     )
 })

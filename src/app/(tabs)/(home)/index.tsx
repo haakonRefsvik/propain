@@ -27,6 +27,7 @@ import getGrillHours from "@/utils/GetGrillHours";
 import CircularSlider from "@/components/CircularSlider";
 import {KnobOption, getClosestOption} from "@/utils/Setting";
 import getMinutesFromHour from "@/utils/GetMinutesFromHour";
+import { TankIcon12L, TankIcon18L, TankIcon24L, TankIconProps } from "@/assets/TankSVG";
 
 const HomeScreen = () => {
     const navigation = useNavigation();
@@ -128,7 +129,6 @@ const HomeScreen = () => {
     if(tankNotChosen){
         displayText = "Velg en tank"
     }
-    
 
     return (
         <GestureHandlerRootView>
@@ -173,7 +173,7 @@ const HomeScreen = () => {
                             flexDirection: "row",
                         }}
                         >
-                        <TankVisual ref = {tankRef}>
+                        <TankVisual ref = {tankRef} Icon={TankIcon24L}>
                             <Text 
                                 style = {{
                                     fontSize: fontSize.lg,
