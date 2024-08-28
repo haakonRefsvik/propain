@@ -13,7 +13,7 @@ export interface TankCardProps{
     onPress?: () => void;
 }
 
-export const TankCard: React.FC<TankCardProps> = ({emptyWeight, liters, Icon, svgColor, onPress}) =>{
+export const CustomTankCard: React.FC<TankCardProps> = ({emptyWeight, liters, Icon, svgColor, onPress}) =>{
     
     return(
         <View>
@@ -23,25 +23,18 @@ export const TankCard: React.FC<TankCardProps> = ({emptyWeight, liters, Icon, sv
                 onPress={onPress}
             >
             <View>
-                <Text style = {{
-                    fontSize: fontSize.lg, 
-                    fontWeight: "500", 
-                    color: colors.text}}>
-                    {liters} L
-                </Text>
                 <Spacer size={5}></Spacer>
                 <Text style = {{
                     fontSize: fontSize.xs, 
                     fontWeight: "500", 
                     opacity: opacity.low,
                     color: colors.text}}>
-                    Netto vekt: {emptyWeight} kg
+                    Egendefinert tank {emptyWeight}
                 </Text>
             </View>
             
             <View style={styles.svgcontainer}>
                 <Spacer size={50} horizontal></Spacer>
-                <Icon width="100%" height="35%" color={svgColor}/>
             </View>
             </TouchableOpacity>
         </View>

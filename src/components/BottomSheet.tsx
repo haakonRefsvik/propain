@@ -64,6 +64,7 @@ const BottomSheet = React.forwardRef<BottomSheetRefProps, BottomSheetProps> (
                 <View style = {styles.thumbline}/>
                 <Spacer size={25}></Spacer>
                 {children}
+                <Spacer size={200}></Spacer>
             </Animated.View>
         </GestureDetector>
     )

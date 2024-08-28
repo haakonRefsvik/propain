@@ -7,7 +7,8 @@ const tanksData = [
     { liters: 24.5, emptyWeight: 5, svgColor: colors.primary, Icon: TankIcon24L},
     { liters: 26.2, emptyWeight: 5.1, svgColor: colors.primary, Icon: TankIcon26L},
     { liters: 27.4, emptyWeight: 5.3, svgColor: colors.primary, Icon: TankIcon27L},
-    { liters: 33.5, emptyWeight: 7.5, svgColor: colors.primary, Icon: TankIcon33L}
+    { liters: 33.5, emptyWeight: 7.5, svgColor: colors.primary, Icon: TankIcon33L},
+    { liters: -1.0, emptyWeight: -1.0, svgColor: "CUSTOM_TANK", Icon: TankIcon12L},    // placeholder for custom tank
 ];
 
 export default tanksData

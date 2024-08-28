@@ -136,6 +136,10 @@ const HomeScreen = () => {
                 <Text style = {{color: colors.text, fontSize: fontSize.lg, fontWeight: "bold"}}>
                     Legg til en tank
                 </Text>
+                <Spacer size={10}></Spacer>
+                <Text style = {{color: colors.text, fontSize: fontSize.sm, opacity: 0.7}}>
+                    Hva slags tank vil du legge til?
+                </Text>
                 <TankList 
                     tanks={tanksData}
                     onTankPress={handleTankPress}
