@@ -18,8 +18,6 @@ const TankList: React.FC<TankListProps> = ({ tanks, onTankPress}) => {
             <CustomTankCard
                 emptyWeight={0.0}
                 liters={0.0}
-                Icon={TankIcon12L}
-
             ></CustomTankCard>
             )
         }
