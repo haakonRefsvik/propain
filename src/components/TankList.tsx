@@ -9,9 +9,10 @@ import Tank from "@/constants/Tank";
 interface TankListProps {
     tanks: TankCardProps[];
     onTankPress: (tank: TankCardProps) => void
+    onError: () => void
 }
 
-const TankList: React.FC<TankListProps> = ({ tanks, onTankPress}) => {
+const TankList: React.FC<TankListProps> = ({ tanks, onTankPress, onError}) => {
     const [liters, setLiters] = useState<string>("")
     const [emptyWeight, setEmptyWeight] = useState<string>("")
     
@@ -24,12 +25,17 @@ const TankList: React.FC<TankListProps> = ({ tanks, onTankPress}) => {
                 onChangeLiters={setLiters}
                 onChangeWeight={setEmptyWeight}
                 onPress={() => {
-                    onTankPress(new Tank(
-                        "", 
-                        parseFloat(emptyWeight), 
-                        parseFloat(liters), 
-                        TankIcon12L)
-                    )
+                    if(emptyWeight === "0" || liters === "0"){
+                        onError()
+                    }
+                    else{
+                        onTankPress(new Tank(
+                            "", 
+                            parseFloat(emptyWeight), 
+                            parseFloat(liters), 
+                            TankIcon12L)
+                        )
+                    }
                 }}
                 ></CustomTankCard>
             )

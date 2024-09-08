@@ -28,6 +28,7 @@ import CircularSlider from "@/components/CircularSlider";
 import {KnobOption, getClosestOption} from "@/utils/Setting";
 import getMinutesFromHour from "@/utils/GetMinutesFromHour";
 import { TankIcon12L, TankIcon18L, TankIcon24L, TankIconProps } from "@/assets/TankSVG";
+import CustomModal from "@/components/CustomModal";
 
 const HomeScreen = () => {
     const navigation = useNavigation();
@@ -35,6 +36,7 @@ const HomeScreen = () => {
     const tankRef = useRef<TankRefProps>(null)
     const [knobPosition, setKnobPosition] = useState<number>(0); // Initialize with your default option
     const [modalVisible, setModalVisible] = useState(false);
+    const [customModalVisible, setCustomModalVisible] = useState(false);
     const [savedTank, setSavedTank] = useState<TankCardProps>()
     const { options, deleteOption, addOption} = useOptions();
     const { inputValue, handleInputChange } = useWeight();
@@ -69,6 +71,7 @@ const HomeScreen = () => {
 
     const handleCloseModal = () => {
         setModalVisible(false)
+        setCustomModalVisible(false)
     }
     
     const handleSavedTank = (name: string) =>{
@@ -80,6 +83,10 @@ const HomeScreen = () => {
             addOption(tank, name);
             setModalVisible(false);
         }
+
+    const handleError = () => {
+        setCustomModalVisible(true)
+    }
         
     const handleDeleteTank = (name: string) => {
         deleteOption(name);
@@ -143,6 +150,7 @@ const HomeScreen = () => {
                 <TankList 
                     tanks={tanksData}
                     onTankPress={handleTankPress}
+                    onError={handleError}
                 ></TankList>
             </BottomSheet>
             
@@ -207,6 +215,13 @@ const HomeScreen = () => {
                     onClose={handleCloseModal} 
                     onSave={handleSavedTank}
                 />
+                <CustomModal
+                    visible = {customModalVisible}
+                    onClose={handleCloseModal
+                    }
+                >
+                    <Text style = {defaultStyles.text}>Liter eller vekt kan ikke være 0</Text>
+                </CustomModal>
             </SafeAreaView>
         </GestureHandlerRootView>
     );
