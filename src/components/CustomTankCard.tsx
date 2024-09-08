@@ -10,15 +10,15 @@ import { InputFieldSmall } from "./InputFieldSmall";
 import useWeight from "@/hooks/UseWeight";
 
 export interface TankCardProps{
-    emptyWeight: number;
-    liters: number;
+    ew: string;
+    l: string;
+    onChangeWeight: (newValue: string) => void;
+    onChangeLiters: (newValue: string) => void;
     svgColor?: string;
-    onPress?: () => void;
+    onPress: () => void;
 }
 
-export const CustomTankCard: React.FC<TankCardProps> = ({onPress}) =>{
-    const [liters, setLiters] = useState<string>("")
-    const [emptyWeight, setEmptyWeight] = useState<string>("")
+export const CustomTankCard: React.FC<TankCardProps> = ({onChangeLiters, onChangeWeight, ew, l, onPress}) =>{
 
     return(
         <View>
@@ -37,17 +37,17 @@ export const CustomTankCard: React.FC<TankCardProps> = ({onPress}) =>{
                 </Text>
                 <Spacer size={7}></Spacer>
                 <InputFieldSmall 
-                    value = {liters} 
+                    value = {l} 
                     label="liter"
-                    onChange={setLiters}    
+                    onChange={onChangeLiters}    
                 ></InputFieldSmall>
             </View>
             <View>
                 <Spacer size={20}></Spacer>
                 <InputFieldSmall 
-                    value = {emptyWeight} 
+                    value = {ew} 
                     label="vekt (n)"
-                    onChange={setEmptyWeight}    
+                    onChange={onChangeWeight}    
                 ></InputFieldSmall>
             </View>
 

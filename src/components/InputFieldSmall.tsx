@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
-import { TouchableOpacity, View, Text, FlatList, TextInput, StyleSheet} from "react-native";
+import { TouchableOpacity, View, Text, FlatList, TextInput, StyleSheet, Keyboard} from "react-native";
 import { inputstyles } from "./DropDown";
 import { colors } from "@/constants/tokens";
 
@@ -29,10 +29,9 @@ export const InputFieldSmall: React.FC<InputFieldProps> = ({ label , value, onCh
 
     return (
         <View>
-            <TouchableOpacity 
+            <TouchableOpacity
                 style = {styles.inputcontainer}
                 onPress={handlePress}
-                activeOpacity={0.8}
             >
                 {value === '' && (
                     <Text style = {inputstyles.dropdowntitle}>{label}</Text>

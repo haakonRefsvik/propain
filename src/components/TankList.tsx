@@ -1,10 +1,10 @@
 import { FlatList, View, StyleSheet, Text} from "react-native";
 import { TankCard, TankCardProps } from "./TankCard";
 import Spacer from "./Spacer";
-import { TankIcon12L } from "@/assets/TankSVG";
+import { TankIcon12L, TankIcon18L } from "@/assets/TankSVG";
 import { CustomTankCard } from "./CustomTankCard";
-
-
+import { useState } from "react";
+import Tank from "@/constants/Tank";
 
 interface TankListProps {
     tanks: TankCardProps[];
@@ -12,13 +12,26 @@ interface TankListProps {
 }
 
 const TankList: React.FC<TankListProps> = ({ tanks, onTankPress}) => {
+    const [liters, setLiters] = useState<string>("")
+    const [emptyWeight, setEmptyWeight] = useState<string>("")
+    
     const renderItem = ({ item }: { item: TankCardProps }) => {
         if(item.svgColor === "CUSTOM_TANK"){
             return(
             <CustomTankCard
-                emptyWeight={0.0}
-                liters={0.0}
-            ></CustomTankCard>
+                ew={emptyWeight}
+                l={liters}
+                onChangeLiters={setLiters}
+                onChangeWeight={setEmptyWeight}
+                onPress={() => {
+                    onTankPress(new Tank(
+                        "", 
+                        parseFloat(emptyWeight), 
+                        parseFloat(liters), 
+                        TankIcon12L)
+                    )
+                }}
+                ></CustomTankCard>
             )
         }
 
