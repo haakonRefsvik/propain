@@ -5,6 +5,7 @@ import { TankIcon12L, TankIcon18L } from "@/assets/TankSVG";
 import { CustomTankCard } from "./CustomTankCard";
 import { useState } from "react";
 import Tank from "@/constants/Tank";
+import parseNumber from "@/utils/ParseNumber";
 
 interface TankListProps {
     tanks: TankCardProps[];
@@ -31,8 +32,8 @@ const TankList: React.FC<TankListProps> = ({ tanks, onTankPress, onError}) => {
                     else{
                         onTankPress(new Tank(
                             "", 
-                            parseFloat(emptyWeight), 
-                            parseFloat(liters), 
+                            parseNumber(emptyWeight), 
+                            parseNumber(liters), 
                             TankIcon12L)
                         )
                     }

@@ -30,8 +30,9 @@ interface CustomModalProps extends ModalProps {
         <View style={styles.overlay}>
           <View style={[styles.modalContent, containerStyle]}>
               {children}
+            <Spacer size={25}></Spacer>
             <Button 
-                title='Ok'
+                title='OK'
                 color = {colors.primary}  
                 onPress={() => onClose()} >
             </Button>

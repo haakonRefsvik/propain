@@ -44,11 +44,33 @@ export const CustomTankCard: React.FC<TankCardProps> = ({onChangeLiters, onChang
             </View>
             <View>
                 <Spacer size={20}></Spacer>
+                <Text style = {{
+                        start: -10,
+                        fontSize: fontSize.xs, 
+                        fontWeight: "500", 
+                        opacity: opacity.low,
+                        color: colors.text}}>
+                        liter
+                    </Text>
+            </View>
+            <View>
+                <Spacer size={20}></Spacer>
                 <InputFieldSmall 
                     value = {ew} 
                     label="vekt (n)"
                     onChange={onChangeWeight}    
                 ></InputFieldSmall>
+            </View>
+            <View>
+                <Spacer size={20}></Spacer>
+                <Text style = {{
+                        start: -0,
+                        fontSize: fontSize.xs, 
+                        fontWeight: "500", 
+                        opacity: opacity.low,
+                        color: colors.text}}>
+                        kg
+                    </Text>
             </View>
 
             <View style={styles.svgcontainer}>
